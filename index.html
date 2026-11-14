@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101827">
+  <meta name="description" content="Um espaço organizado para aprender, revisar e acompanhar suas atividades.">
+  <title>Estudos — Portal de aprendizagem</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#" aria-label="Página inicial">
+        <span class="brand-mark">e<span>.</span></span>
+        <span><strong>estudos</strong><small>SEU ESPAÇO DE APRENDIZADO</small></span>
+      </a>
+      <div class="side-label">MENU</div>
+      <nav class="side-nav" aria-label="Navegação principal">
+        <button class="nav-item active" data-view="home"><span class="nav-icon">⌂</span> Visão geral</button>
+        <button class="nav-item" data-view="lessons"><span class="nav-icon">▤</span> Aulas <span class="nav-count" id="lesson-count">0</span></button>
+        <button class="nav-item" data-view="activities"><span class="nav-icon">✓</span> Atividades <span class="nav-count" id="activity-count">0</span></button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="focus-card"><span class="focus-icon">✦</span><strong>Um passo de cada vez.</strong><p>Consistência vale mais que pressa. Continue no seu ritmo.</p></div>
+        <button class="profile-button" id="admin-open"><span class="avatar">A</span><span><strong>Área do administrador</strong><small id="admin-status">Somente consulta</small></span><span class="profile-arrow">↗</span></button>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <button class="icon-button mobile-menu" id="menu-toggle" aria-label="Abrir menu">☰</button>
+        <div class="breadcrumb">Portal <span>/</span> <strong id="breadcrumb-current">Visão geral</strong></div>
+        <div class="top-actions">
+          <span class="live-indicator"><i></i> Conteúdo atualizado</span>
+          <button class="icon-button" id="theme-toggle" aria-label="Alternar tema" title="Alternar tema">☼</button>
+        </div>
+      </header>
+
+      <section class="content-wrap">
+        <div class="page-heading">
+          <div><div class="eyebrow"><span class="eyebrow-line"></span> SEU AMBIENTE DE ESTUDOS</div><h1 id="page-title">Aprender é um processo<span>.</span></h1><p id="page-subtitle">Tudo o que você precisa, organizado em um só lugar.</p></div>
+          <div class="date-chip"><span>◷</span><span id="today-label">Seu espaço de hoje</span></div>
+        </div>
+
+        <section class="hero-card">
+          <div class="hero-content"><div class="hero-kicker">BEM-VINDO(A) DE VOLTA</div><h2>Pequenos avanços.<br><em>Grandes conquistas.</em></h2><p>Explore as aulas, revise os materiais e acompanhe suas atividades. Seu próximo passo começa aqui.</p><button class="primary-button" data-view="lessons">Explorar aulas <span>→</span></button></div>
+          <div class="hero-art" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="art-spark spark-one">✳</div><div class="art-spark spark-two">✦</div><div class="book-stack"><div class="book book-back"></div><div class="book book-mid"></div><div class="book book-front"><span>IDEIAS</span><b>∞</b></div></div><div class="art-dot"></div></div>
+          <div class="hero-index">01 <span>/ 03</span></div>
+        </section>
+
+        <section class="stats-grid">
+          <article class="stat-card"><div class="stat-top"><span class="stat-icon lavender">▤</span><span class="stat-caption">CONTEÚDO</span></div><strong id="stat-lessons">0</strong><p>Aulas disponíveis</p></article>
+          <article class="stat-card"><div class="stat-top"><span class="stat-icon mint">✓</span><span class="stat-caption">PRÁTICA</span></div><strong id="stat-activities">0</strong><p>Atividades disponíveis</p></article>
+          <article class="stat-card"><div class="stat-top"><span class="stat-icon peach">↗</span><span class="stat-caption">SEU RITMO</span></div><strong id="stat-materials">0</strong><p>Materiais para explorar</p></article>
+        </section>
+
+        <section class="section-block" id="recent-section">
+          <div class="section-heading"><div><div class="eyebrow">COMECE POR AQUI</div><h2>Conteúdos recentes</h2></div><button class="text-button" data-view="lessons">Ver todas <span>→</span></button></div>
+          <div class="content-grid" id="recent-grid"><div class="empty-state"><span>✦</span><strong>Seu espaço está sendo preparado</strong><p>Os conteúdos adicionados aparecerão aqui.</p></div></div>
+        </section>
+
+        <section class="section-block listing-section hidden" id="listing-section">
+          <div class="section-heading"><div><div class="eyebrow" id="listing-eyebrow">BIBLIOTECA</div><h2 id="listing-title">Aulas</h2></div><div class="listing-tools"><label class="search-box"><span>⌕</span><input id="search-input" type="search" placeholder="Buscar conteúdo..."></label><select id="sort-select" aria-label="Ordenar conteúdos"><option value="newest">Mais recentes</option><option value="oldest">Mais antigos</option><option value="az">Ordem alfabética</option></select></div></div>
+          <div class="content-grid" id="listing-grid"></div>
+        </section>
+
+        <footer class="footer"><span>Feito para aprender, no seu tempo.</span><span>ESTUDOS <b>•</b> PORTAL DE APRENDIZAGEM</span></footer>
+      </section>
+    </main>
+  </div>
+  <div class="overlay" id="overlay"></div>
+  <section class="modal" id="content-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <button class="modal-close" data-close aria-label="Fechar">×</button><div class="modal-kind" id="modal-kind">AULA</div><h2 id="modal-title"></h2><p class="modal-summary" id="modal-summary"></p><div class="modal-body" id="modal-body"></div><div id="modal-video"></div><div id="modal-links"></div><div id="modal-files"></div>
+  </section>
+  <section class="modal admin-modal" id="admin-modal" role="dialog" aria-modal="true" aria-labelledby="admin-title">
+    <button class="modal-close" data-close aria-label="Fechar">×</button><div class="modal-kind">ACESSO RESTRITO</div><h2 id="admin-title">Área do administrador</h2><p class="modal-summary">Entre para criar, editar e organizar os conteúdos do portal.</p>
+    <form id="login-form" class="form-stack"><label>E-mail<input type="email" id="login-email" autocomplete="username" required placeholder="seu@email.com"></label><label>Senha<input type="password" id="login-password" autocomplete="current-password" required placeholder="Sua senha"></label><button class="primary-button full-button" type="submit">Entrar <span>→</span></button><p class="form-message" id="login-message"></p></form>
+    <div class="admin-panel hidden" id="admin-panel"><div class="admin-panel-head"><strong>Gerenciar conteúdos</strong><button class="text-button" id="logout-button">Sair ↗</button></div><div class="admin-actions"><button class="primary-button" id="new-lesson">＋ Nova aula</button><button class="secondary-button" id="new-activity">＋ Nova atividade</button></div><div id="admin-list" class="admin-list"></div></div>
+  </section>
+  <section class="modal editor-modal" id="editor-modal" role="dialog" aria-modal="true" aria-labelledby="editor-title">
+    <button class="modal-close" data-close aria-label="Fechar">×</button><div class="modal-kind">EDITOR DE CONTEÚDO</div><h2 id="editor-title">Novo conteúdo</h2>
+    <form id="editor-form" class="form-stack">
+      <input type="hidden" id="edit-id"><input type="hidden" id="edit-kind">
+      <label>Título<input id="edit-title" required maxlength="120" placeholder="Ex.: Introdução ao tema"></label>
+      <label>Descrição curta<input id="edit-summary" maxlength="220" placeholder="Uma frase para apresentar o conteúdo"></label>
+      <label>Texto / instruções<textarea id="edit-body" rows="6" placeholder="Escreva aqui a introdução, explicação ou instruções da atividade..."></textarea></label>
+      <label>Link de vídeo do YouTube (opcional)<input id="edit-video" type="url" placeholder="https://www.youtube.com/watch?v=..."></label>
+      <label>Links externos (um por linha)<textarea id="edit-links" rows="3" placeholder="Título | https://exemplo.com"></textarea></label>
+      <label>Arquivos (PDF, PPT, imagens etc.)<input id="edit-files" type="file" multiple><small class="field-help">Os arquivos serão enviados para o armazenamento compartilhado do portal.</small></label>
+      <div id="existing-files" class="existing-files"></div>
+      <label class="check-label"><input type="checkbox" id="edit-published" checked> Publicar este conteúdo</label>
+      <button class="primary-button full-button" type="submit">Salvar conteúdo <span>→</span></button><p class="form-message" id="editor-message"></p>
+    </form>
+  </section>
+  <div class="toast" id="toast" role="status"></div>
+</body>
+</html>
